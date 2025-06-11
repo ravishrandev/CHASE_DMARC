@@ -1,9 +1,10 @@
-from __future__ import print_function                           #compatibility with < python 3
+'''from __future__ import print_function                           #compatibility with < python 3
 import os.path                                                  #check if token exist
 from google.auth.transport.requests import Request              #handle refreshing tokens securely
 from google.oauth2.credentials import Credentials               #store and load Gmail access tokens
 from google_auth_oauthlib.flow import InstalledAppFlow          #initiate Oauth browser popup 
 from googleapiclient.discovery import build                     #create service objec to talk to Gmail API
+import base64
 
 # If modifying these SCOPES, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
@@ -40,11 +41,24 @@ def main():
         print("Latest messages:")
         for msg in messages:
             msg_data = service.users().messages().get(userId='me', id=msg['id']).execute()
+            parts = msg_data['payload'].get('parts',[])
             headers = msg_data['payload']['headers']
             subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'No Subject')
             print("-", subject)
+            for part in parts:
+                filename = part.get('filename')
+                if filename:
+                    attachment_id = part['body']['attachmentId']
+                    print("Downloading", filename)
+                    attachment = service.users().messages().attachments().get(
+                        userId = 'me', messageId= msg['id'], id=attachment_id).execute()
+                    data = attachment['data']
+                    file_data= base64.urlsafe_b64decode(data.encode('UTF-8'))
+                    with open(filename, 'wb') as f:
+                        f.write(file_data)
+                    
 
 if __name__ == '__main__':
     print("🚀 Script started")
 
-    main()
+    main()'''
