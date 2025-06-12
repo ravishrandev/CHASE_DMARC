@@ -1,8 +1,8 @@
-from google.auth.transport.requests import Request
+from google.auth.transport.requests import Request                   #handle refreshing tokens securely
 from google.oauth2.credentials import Credentials                 #store and load Gmail access tokens
 from google_auth_oauthlib.flow import InstalledAppFlow            #initiate Oauth browser popup 
 from googleapiclient.discovery import build                      #create service objec to talk to Gmail API
-import os
+import os                                                       #use for directory purposes
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
