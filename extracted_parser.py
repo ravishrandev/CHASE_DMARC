@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 
-def xml_parser(source_dir='extracted'):
+def parse_dmarc_reports(source_dir='extracted'):
 
     records = []                                                #store records in dictionary
 
