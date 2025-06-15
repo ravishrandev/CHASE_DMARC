@@ -13,4 +13,11 @@ def xml_parser(source_dir='extracted'):
                 print(f"📂 Reading: {filename}")
                 tree = ET.parse(xml_path)
                 root = tree.getroot() 
-                print(ET.tostring(root, encoding='unicode'))
+                #print(ET.tostring(root, encoding='unicode'))
+                for record in root.findall('record'):
+                    row = record.find('row')
+                    source_ip = row.find('source_ip').text
+                    count = row.find('count').text
+
+                    print("📌 Source IP:", source_ip)
+                    print("📊 Count:", count)
