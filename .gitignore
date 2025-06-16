@@ -1,6 +1,14 @@
 token.json
 credentials.json
+
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+
 downloads/
 demo/
 extracted/
+
+.DS_Store
+.vscode/
