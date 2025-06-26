@@ -2,15 +2,17 @@ import base64
 import os
 from datetime import datetime, timedelta
 
+today = datetime.now()
+
 #get the days range for downloading files
 def get_week_range():
-    today = datetime.now()
+    
     #Get monday (Weekday 0)
     monday = today- timedelta(days=today.weekday())
     #Get next monday (start of next week)
     next_monday = monday + timedelta(days=7)
 
-    Format as YYYY/MM/DD (Gmail expects this)
+    #Format as YYYY/MM/DD (Gmail expects this)
     return monday.strftime('%Y/%m/%d'), next_monday.strftime('%Y/%m/%d')
 
 
@@ -38,15 +40,18 @@ def find_attachments(payload):
 def download_dmarc_reports(service, max_results=30, save_dir="downloads"):
     os.makedirs(save_dir, exist_ok=True)
 
+    monday_str, next_monday_str = get_week_range()
+
     results = service.users().messages().list(
         userId='me',
         maxResults=max_results,
-        q='subject:"Report domain" has:attachment'
+        q = f'subject:"Report domain" has:attachment after:{monday_str} before:{next_monday_str}'
     ).execute()
 
     messages = results.get('messages', [])
     print("📊 Estimated total matches:", results.get('resultSizeEstimate'))
     print("📥 Returned message count:", len(messages))
+    print("Reports between date:", monday_str,"and", today)
 
     if not messages:
         print("No messages found.")
