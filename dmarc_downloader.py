@@ -1,9 +1,23 @@
 import base64
 import os
+from datetime import datetime, timedelta
 
+#get the days range for downloading files
+def get_week_range():
+    today = datetime.now()
+    #Get monday (Weekday 0)
+    monday = today- timedelta(days=today.weekday())
+    #Get next monday (start of next week)
+    next_monday = monday + timedelta(days=7)
+
+    Format as YYYY/MM/DD (Gmail expects this)
+    return monday.strftime('%Y/%m/%d'), next_monday.strftime('%Y/%m/%d')
+
+
+#finds mime payload structure.
 def find_attachments(payload):
     """Recursively find all parts with filename and attachmentId."""
-    attachments = []
+    attachments = []            #empty list to store attachments
 
     if 'parts' in payload:
         for part in payload['parts']:
