@@ -1,3 +1,4 @@
+import os
 from gmail_service import get_gmail_service
 from dmarc_downloader import download_dmarc_reports
 from dmarc_extractor import extract_compressed_files
@@ -13,7 +14,11 @@ if __name__ == '__main__':
     records = parse_dmarc_reports()
     html_output = generate_html_table(records)
     
-    with open("weekly_dmarc_summary.html", "w") as f:
+    output_dir = "html"
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, "weekly_dmarc_summary.html")
+    with open(output_path, "w") as f:
         f.write(html_output)
-    print("✅ HTML report saved as weekly_dmarc_summary.html")
+    print(f"HTML report saved as {output_path}")
+
 
